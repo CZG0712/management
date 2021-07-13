@@ -1,0 +1,194 @@
+<template>
+  <div>
+    <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>内容管理</el-breadcrumb-item>
+      <el-breadcrumb-item>新闻资讯</el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <!-- 卡片区域 -->
+    <el-card>
+      <!-- 搜索与添加区域 -->
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <el-input placeholder="搜索相关资讯" clearable>
+            <el-button slot="append" icon="el-icon-search"> </el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="primary" @click="addDialogVisible = true">
+            添加资讯
+          </el-button>
+        </el-col>
+      </el-row>
+
+      <!-- 新闻资讯列表区域 -->
+      <el-table
+        :data="newsList"
+        :stripe="true"
+        border
+        :default-sort="{ prop: 'date', order: 'descending' }"
+      >
+        <!-- 索引列表 -->
+        <el-table-column type="index" label="#"></el-table-column>
+        <el-table-column
+          label="日期"
+          prop="date"
+          align="center"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="标题"
+          prop="title"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="内容"
+          prop="content"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="操作" align="center">
+          <!-- 作用域插槽 -->
+          <!-- scope.row能够访问到本行的数据 -->
+          <!-- 修改按钮 -->
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            round
+            @click="editDialogVisible = true"
+            >编辑</el-button
+          >
+          <!-- 删除按钮 -->
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            round
+            @click="removeNews"
+            >删除</el-button
+          >
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页区域 -->
+      <el-pagination
+        :current-page="1"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="5"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="3"
+      >
+      </el-pagination>
+
+      <!-- 添加新的资讯的对话框 -->
+      <el-dialog
+        title="添加新的资讯"
+        :visible.sync="addDialogVisible"
+        width="50%"
+        @close="addDialogClosed"
+      >
+        <!-- 内容主体区域 -->
+        <el-form :model="addNewsForm" ref="addNewsFormRef" label-width="70px">
+          <el-form-item label="标题">
+            <el-input
+              v-model="addNewsForm.title"
+              :height="200"
+              placeholder="请输入标题"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="内容">
+            <el-input
+              v-model="addNewsForm.content"
+              type="textarea"
+              autosize
+              placeholder="请输入内容"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <!-- 底部按钮区域 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addDialogVisible = false">取 消</el-button>
+          <el-button type="primary">
+            确 定
+          </el-button>
+        </span>
+      </el-dialog>
+
+      <!-- 修改资讯的对话框 -->
+      <el-dialog title="编辑资讯" :visible.sync="editDialogVisible" width="50%">
+        <!-- 内容主体区域 -->
+        <el-form :model="addNewsForm" ref="editNewsFormRef" label-width="70px">
+          <el-form-item label="标题">
+            <el-input
+              v-model="newsList[0].title"
+              :height="200"
+              placeholder="请输入标题"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="内容">
+            <el-input
+              v-model="newsList[0].content"
+              type="textarea"
+              autosize
+              placeholder="请输入内容"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <!-- 底部按钮区域 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="editDialogVisible = false">取 消</el-button>
+          <el-button type="primary">
+            确 定
+          </el-button>
+        </span>
+      </el-dialog>
+    </el-card>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      addNewsForm: {
+        title: "",
+        content: "",
+      },
+      // 添加咨询对话框的显示与不显示
+      addDialogVisible: false,
+      editDialogVisible: false,
+      newsList: [
+        {
+          date: "2021-7-1",
+          title: "测试01",
+          content:
+            "达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统",
+        },
+        {
+          date: "2021-7-2",
+          title: "测试02",
+          content:
+            "测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02测试02",
+        },
+      ],
+    };
+  },
+  methods: {
+    //监听添加用户对话框的关闭
+    addDialogClosed() {
+      // 重置区域
+      this.$refs.addNewsFormRef.resetFields();
+      console.log("123123");
+    },
+    removeNews() {
+      this.$confirm("此操作将永久删除该资讯, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true,
+      }).catch((err) => err);
+    },
+  },
+};
+</script>
