@@ -14,7 +14,7 @@
         <div class="clear_tips">当前官网轮播图:</div>
       </el-row>
       <el-carousel :interval="3000" type="card" height="200px">
-        <el-carousel-item v-for="item in slideImgs" :key="item">
+        <el-carousel-item v-for="item in slideImgs" :key="item.id">
           <h3 class="medium">{{ item.id }}</h3>
         </el-carousel-item>
       </el-carousel>
@@ -23,33 +23,18 @@
       <el-row>
         <div class="clear_tips">上传图片区域:</div>
       </el-row>
-      <el-upload action="#" list-type="picture-card" :auto-upload="false">
-        <i slot="default" class="el-icon-plus"></i>
-        <div slot="file" slot-scope="{ file }">
-          <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-          <span class="el-upload-list__item-actions">
-            <span
-              class="el-upload-list__item-preview"
-              @click="handlePictureCardPreview(file)"
-            >
-              <i class="el-icon-zoom-in"></i>
-            </span>
-            <span
-              v-if="!disabled"
-              class="el-upload-list__item-delete"
-              @click="handleDownload(file)"
-            >
-              <i class="el-icon-download"></i>
-            </span>
-            <span
-              v-if="!disabled"
-              class="el-upload-list__item-delete"
-              @click="handleRemove(file)"
-            >
-              <i class="el-icon-delete"></i>
-            </span>
-          </span>
+      <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
+      >
+        <div slot="tip" class="el-upload__tip">
+          只能上传JPG文件，且不超过2MB
         </div>
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
       <el-dialog :visible.sync="dialogVisible">
         <img width="100%" :src="dialogImageUrl" alt="" />
@@ -62,6 +47,7 @@
 export default {
   data() {
     return {
+      imageUrl: "",
       slideImgs: [
         { id: "Img-1", src: "123123" },
         { id: "Img-2", src: "123123" },
@@ -77,15 +63,20 @@ export default {
     };
   },
   methods: {
-    handleRemove(file) {
-      console.log(file);
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    handleDownload(file) {
-      console.log(file);
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     },
   },
 };
@@ -111,13 +102,42 @@ export default {
 .clear_tips {
   font-size: 18px;
   font-weight: 100px;
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
   width: 140px;
   height: 30px;
   border-radius: 10px;
   padding: 5px 2px 1px 10px;
+  margin-top: -5px;
   color: rgb(55, 66, 62);
   background-color: rgb(115, 178, 233);
   margin-bottom: 5px;
+  box-shadow: 0 0 10px rgba(67, 136, 233, 0.8);
+}
+/* 上传图片区域的样式 */
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+  border: 1px dashed rgb(123, 123, 123);
+  border-radius: 30px;
+  margin-top: 10px;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

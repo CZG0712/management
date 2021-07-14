@@ -24,6 +24,17 @@
 
       <!-- 用户列表区域 -->
       <el-table :data="userList" :stripe="true" border>
+        <!-- 下拉栏区域 -->
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-row>
+              <el-col :span="3">性别:</el-col>
+              <el-col :span="3">{{ props.row.gender }}</el-col>
+            </el-row>
+            <el-col :span="3">注册时间：</el-col>
+            <el-col :span="4">{{ props.row.registTime }}</el-col>
+          </template>
+        </el-table-column>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column
           label="昵称"
@@ -50,7 +61,7 @@
           prop="role_name"
           align="center"
         ></el-table-column>
-        <!-- <el-table-column label="状态" align="center">
+        <el-table-column label="状态" align="center">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.mg_state"
@@ -60,7 +71,7 @@
             >
             </el-switch>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column label="操作" align="center" width="180px">
           <template>
             <!-- 作用域插槽 -->
@@ -92,56 +103,6 @@
       >
       </el-pagination>
 
-      <!-- 添加用户的对话框 -->
-      <!-- <el-dialog
-        title="添加用户"
-        :visible.sync="addDialogVisible"
-        width="50%"
-        @close="addDialogClosed"
-      > -->
-      <!-- 内容主体区域 -->
-      <!-- <el-form
-          :model="addForm"
-          :rules="addFormRules"
-          ref="addFormRef"
-          label-width="70px"
-        >
-          <el-form-item label="昵称" prop="nickname">
-            <el-input v-model="addForm.nickname"></el-input>
-          </el-form-item>
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="addForm.username"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input v-model="addForm.password"></el-input>
-          </el-form-item>
-          <el-form-item label="权限" prop="mg_roles">
-            <el-select v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="addForm.email"></el-input>
-          </el-form-item>
-          <el-form-item label="手机" prop="mobile">
-            <el-input v-model="addForm.mobile"></el-input>
-          </el-form-item>
-        </el-form> -->
-      <!-- 底部按钮区域 -->
-      <!-- <span slot="footer" class="dialog-footer">
-          <el-button @click="addDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="showEditDialog">
-            确 定
-          </el-button>
-        </span>
-      </el-dialog> -->
-
       <!-- 修改用户的对话框 -->
       <el-dialog
         title="修改用户基本信息"
@@ -164,7 +125,7 @@
             <el-input v-model="userList[0].password"></el-input>
           </el-form-item> -->
           <el-form-item label="权限" prop="mg_roles">
-            <el-select v-model="value" placeholder="超级管理员">
+            <el-select v-model="value" placeholder="普通用户">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -227,21 +188,25 @@ export default {
       userList: [
         {
           nickname: "小红",
+          gender: "女",
           username: "admin",
           password: "123123",
           mobile: "18588888888",
           email: "123@asd.com",
           mg_state: true,
           role_name: "普通用户",
+          registTime: "2021-6-27",
         },
         {
           nickname: "花花",
+          gender: "男",
           username: "user12138",
           password: "qwe123456",
           mobile: "15678787878",
           email: "kijhh@163.com",
           mg_state: true,
           role_name: "普通用户",
+          registTime: "2021-7-10",
         },
       ],
       total: 0,
@@ -259,14 +224,10 @@ export default {
       options: [
         {
           value: "选项一",
-          label: "超级管理员",
-        },
-        {
-          value: "选项二",
           label: "普通管理员",
         },
         {
-          value: "选项三",
+          value: "选项二",
           label: "普通用户",
         },
       ],

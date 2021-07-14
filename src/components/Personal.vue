@@ -103,7 +103,7 @@
         :model="editPasswordForm"
         :rules="editPasswordRules"
         ref="editPasswordRef"
-        label-width="70px"
+        label-width="80px"
       >
         <el-form-item label="旧密码" prop="prePassword">
           <el-input
@@ -123,6 +123,13 @@
           <el-input
             v-model="editPasswordForm.renewPassword"
             placeholder="请再次输入新密码"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="预留邮箱" prop="email">
+          <el-input
+            v-model="editPasswordForm.email"
+            placeholder="请输入注册时填写的邮箱"
             clearable
           ></el-input>
         </el-form-item>
@@ -166,6 +173,7 @@ export default {
         prePassword: "",
         newPassword: "",
         renewPassword: "",
+        email: "",
         valicationCode: "",
       },
       editPasswordRules: {
@@ -177,6 +185,13 @@ export default {
         ],
         renewPassword: [
           { required: true, message: "请输入密码", trigger: "blur" },
+        ],
+        email: [
+          {
+            required: true,
+            message: "请输入注册时预留邮箱（用于接收验证码）",
+            trigger: "blur",
+          },
         ],
         valicationCode: [
           { required: true, message: "请输入验证码", trigger: "blur" },

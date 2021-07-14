@@ -8,6 +8,19 @@
     </el-breadcrumb>
 
     <el-card>
+      <!-- 搜索与添加区域 -->
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <el-input
+            placeholder="请输入搜索内容"
+            v-model="queryInfo.query"
+            clearable
+          >
+            <el-button slot="append" icon="el-icon-search"> </el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+
       <!-- 留言表格区域 -->
       <el-table
         :data="MessageList"
@@ -20,7 +33,7 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column
           prop="date"
-          label="日期"
+          label="留言日期"
           width="108"
           align="center"
           sortable

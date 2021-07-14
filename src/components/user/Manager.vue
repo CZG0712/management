@@ -13,8 +13,8 @@
       <el-row :gutter="20">
         <el-col :span="7">
           <el-input
-            placeholder="请输入内容"
-            v-model="queryInfo.query"
+            placeholder="请输入查询内容"
+            v-model="queryInfo.queryItems"
             clearable
           >
             <el-button slot="append" icon="el-icon-search"> </el-button>
@@ -29,9 +29,24 @@
 
       <!-- 用户列表区域 -->
       <el-table :data="managerList" :stripe="true" border>
+        <!-- 下拉栏区域 -->
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-row>
+              <el-col :span="3">当前在线状态:</el-col>
+              <el-col :span="3">{{ props.row.onlineState }}</el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="3">最后登录时间：</el-col>
+              <el-col :span="4">{{ props.row.lastLogin }}</el-col>
+            </el-row>
+            <el-col :span="3">注册时间：</el-col>
+            <el-col :span="4">{{ props.row.registTime }}</el-col>
+          </template>
+        </el-table-column>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column
-          label="昵称"
+          label="姓名"
           prop="nickname"
           align="center"
         ></el-table-column>
@@ -55,6 +70,20 @@
           prop="role_name"
           align="center"
         ></el-table-column>
+        <el-table-column label="状态" align="center">
+          <template slot-scope="scope">
+            <!-- 作用域插槽 -->
+            <!-- scope.row能够访问到本行的数据 -->
+            <!-- {{ scope.row }} -->
+            <el-switch
+              v-model="scope.row.mg_state"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="userStateChanged(scope.row)"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" width="180px">
           <template>
             <!-- 作用域插槽 -->
@@ -88,7 +117,7 @@
 
       <!-- 添加用户的对话框 -->
       <el-dialog
-        title="添加管理员"
+        title="添加普通管理员"
         :visible.sync="addDialogVisible"
         width="50%"
         @close="addDialogClosed"
@@ -100,7 +129,7 @@
           ref="addFormRef"
           label-width="70px"
         >
-          <el-form-item label="昵称" prop="nickname">
+          <el-form-item label="姓名" prop="nickname">
             <el-input v-model="addForm.nickname"></el-input>
           </el-form-item>
           <el-form-item label="用户名" prop="username">
@@ -109,7 +138,7 @@
           <el-form-item label="密码" prop="password">
             <el-input v-model="addForm.password"></el-input>
           </el-form-item>
-          <el-form-item label="权限" prop="mg_roles">
+          <!-- <el-form-item label="权限" prop="mg_roles">
             <el-select v-model="value" placeholder="请选择">
               <el-option
                 v-for="item in options"
@@ -119,7 +148,7 @@
               >
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="addForm.email"></el-input>
           </el-form-item>
@@ -148,16 +177,16 @@
           ref="editFormRef"
           label-width="70px"
         >
-          <el-form-item label="昵称" prop="nickname">
+          <el-form-item label="姓名" prop="nickname">
             <el-input v-model="managerList[0].nickname"></el-input>
           </el-form-item>
           <el-form-item label="用户名" prop="username">
             <el-input v-model="managerList[0].username" disabled></el-input>
           </el-form-item>
-          <!-- <el-form-item label="密码" prop="password">
+          <el-form-item label="密码" prop="password">
             <el-input v-model="managerList[0].password"></el-input>
-          </el-form-item> -->
-          <el-form-item label="权限" prop="mg_roles">
+          </el-form-item>
+          <!-- <el-form-item label="权限" prop="mg_roles">
             <el-select v-model="value" placeholder="超级管理员">
               <el-option
                 v-for="item in options"
@@ -167,7 +196,7 @@
               >
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="managerList[0].email"></el-input>
           </el-form-item>
@@ -207,11 +236,10 @@ export default {
       cb(new Error("请输入合法的手机号"));
     };
     return {
-      value: "",
       // 获取用户列表的参数对象
       queryInfo: {
         // 查询信息
-        query: "",
+        queryItems: "",
         // 当前的页数
         pagenum: 1,
         // 每一页的数据数
@@ -227,6 +255,9 @@ export default {
           email: "123@asd.com",
           mg_state: true,
           role_name: "超级管理员",
+          onlineState: "在线",
+          lastLogin: "2021-6-30",
+          registTime: "2021-6-29",
         },
         {
           nickname: "花花",
@@ -236,6 +267,9 @@ export default {
           email: "kijhh@163.com",
           mg_state: true,
           role_name: "普通管理员",
+          onlineState: "离线",
+          lastLogin: "2021-7-12",
+          registTime: "2021-7-3",
         },
       ],
       total: 0,
@@ -250,16 +284,21 @@ export default {
         mg_roles: "",
       },
       // 权限管理
-      options: [
-        {
-          value: "选项一",
-          label: "超级管理员",
-        },
-        {
-          value: "选项二",
-          label: "普通管理员",
-        },
-      ],
+      // options: [
+      //   {
+      //     value: "选项一",
+      //     label: "超级管理员",
+      //   },
+      //   {
+      //     value: "选项二",
+      //     label: "普通管理员",
+      //   },
+      //   {
+      //     value: "选项三",
+      //     label: "普通用户",
+      //   },
+      // ],
+
       // 添加表单的验证规则对象
       addFormRules: {
         nickname: [

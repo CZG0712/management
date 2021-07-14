@@ -18,7 +18,7 @@
         </el-col>
         <el-col :span="4">
           <el-button type="primary" @click="addDialogVisible = true">
-            添加资讯
+            发布资讯
           </el-button>
         </el-col>
       </el-row>
@@ -88,15 +88,15 @@
         @close="addDialogClosed"
       >
         <!-- 内容主体区域 -->
-        <el-form :model="addNewsForm" ref="addNewsFormRef" label-width="70px">
-          <el-form-item label="标题">
+        <el-form :model="addNewsForm" ref="addNewsFormRef" label-width="90px">
+          <el-form-item label="标题:">
             <el-input
               v-model="addNewsForm.title"
               :height="200"
               placeholder="请输入标题"
             ></el-input>
           </el-form-item>
-          <el-form-item label="内容">
+          <el-form-item label="内容:">
             <el-input
               v-model="addNewsForm.content"
               type="textarea"
@@ -105,12 +105,47 @@
             >
             </el-input>
           </el-form-item>
+          <el-form-item label="资讯配图:">
+            <el-upload action="#" list-type="picture-card" :auto-upload="false">
+              <i slot="default" class="el-icon-plus"></i>
+              <div slot="file" slot-scope="{ file }">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url"
+                  alt=""
+                />
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(file)"
+                  >
+                    <i class="el-icon-download"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove(file)"
+                  >
+                    <i class="el-icon-delete"></i>
+                  </span>
+                </span>
+              </div>
+            </el-upload>
+            <!--  -->
+          </el-form-item>
         </el-form>
         <!-- 底部按钮区域 -->
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false">取 消</el-button>
           <el-button type="primary">
-            确 定
+            发 布
           </el-button>
         </span>
       </el-dialog>
@@ -119,14 +154,14 @@
       <el-dialog title="编辑资讯" :visible.sync="editDialogVisible" width="50%">
         <!-- 内容主体区域 -->
         <el-form :model="addNewsForm" ref="editNewsFormRef" label-width="70px">
-          <el-form-item label="标题">
+          <el-form-item label="标题:">
             <el-input
               v-model="newsList[0].title"
               :height="200"
               placeholder="请输入标题"
             ></el-input>
           </el-form-item>
-          <el-form-item label="内容">
+          <el-form-item label="内容:">
             <el-input
               v-model="newsList[0].content"
               type="textarea"
@@ -134,6 +169,41 @@
               placeholder="请输入内容"
             >
             </el-input>
+          </el-form-item>
+          <el-form-item label="资讯配图:">
+            <el-upload action="#" list-type="picture-card" :auto-upload="false">
+              <i slot="default" class="el-icon-plus"></i>
+              <div slot="file" slot-scope="{ file }">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url"
+                  alt=""
+                />
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(file)"
+                  >
+                    <i class="el-icon-download"></i>
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove(file)"
+                  >
+                    <i class="el-icon-delete"></i>
+                  </span>
+                </span>
+              </div>
+            </el-upload>
+            <!--  -->
           </el-form-item>
         </el-form>
         <!-- 底部按钮区域 -->
@@ -151,6 +221,10 @@
 export default {
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
+      disabled: false,
+      //
       addNewsForm: {
         title: "",
         content: "",
@@ -188,6 +262,18 @@ export default {
         type: "warning",
         center: true,
       }).catch((err) => err);
+    },
+
+    //
+    handleRemove(file) {
+      console.log(file);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleDownload(file) {
+      console.log(file);
     },
   },
 };
