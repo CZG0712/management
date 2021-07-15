@@ -14,7 +14,7 @@
       <!-- 侧边栏 -->
       <el-aside :width="isCollapse ? '200px' : '25px'">
         <div class="toggle-button" @click="toggleCollapse">
-          <i class="el-icon-magic-stick"></i>
+          <i class="el-icon-ship"></i>
         </div>
         <!-- 侧边栏菜单区域 -->
         <el-menu
@@ -70,15 +70,15 @@
               <span>内容管理</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item index="/topmenu">
-              <!-- 二级菜单的模板区域 -->
-              <template slot="title">
-                <!-- 图标 -->
-                <i class="el-icon-menu"></i>
-                <!-- 文本 -->
-                <span>网页顶部菜单</span>
-              </template>
-            </el-menu-item>
+            <!-- <el-menu-item index="/topmenu"> -->
+            <!-- 二级菜单的模板区域 -->
+            <!-- <template slot="title"> -->
+            <!-- 图标 -->
+            <!-- <i class="el-icon-menu"></i> -->
+            <!-- 文本 -->
+            <!-- <span>网页顶部菜单</span> -->
+            <!-- </template> -->
+            <!-- </el-menu-item> -->
             <el-menu-item index="/slidder">
               <!-- 二级菜单的模板区域 -->
               <template slot="title">

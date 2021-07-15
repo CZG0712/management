@@ -9,18 +9,82 @@
 
     <el-card>
       <!-- 搜索与添加区域 -->
-      <el-row :gutter="20">
-        <el-col :span="7">
-          <el-input
-            placeholder="请输入搜索内容"
-            v-model="queryInfo.query"
-            clearable
-          >
-            <el-button slot="append" icon="el-icon-search"> </el-button>
-          </el-input>
-        </el-col>
-      </el-row>
-
+      <el-drawer
+        title="更多搜索条件"
+        :visible.sync="drawer"
+        :direction="direction"
+      >
+        <!-- :before-close="handleClose" -->
+        <div class="searchPart" style="justify-content:center">
+          <div class="searchItem">
+            <div style="margin-top:10px">电话：</div>
+            <div style="margin-right:30px">
+              <el-input
+                v-model="queryInfo.queryItem.mobile"
+                placeholder="按照电话查找"
+                clearable
+              ></el-input>
+            </div>
+          </div>
+          <div class="searchItem">
+            <div style="margin-top:10px">邮箱：</div>
+            <div style="margin-right:30px">
+              <el-input
+                v-model="queryInfo.queryItem.email"
+                placeholder="按照邮箱查找"
+                clearable
+              ></el-input>
+            </div>
+          </div>
+          <div class="Search_Msg">
+            <!-- 查找资讯 -->
+            <el-button type="primary">查找</el-button>
+          </div>
+        </div>
+      </el-drawer>
+      <div class="searchPart">
+        <div class="searchItem">
+          <div style="margin-top:10px">日期：</div>
+          <div style="margin-right:30px">
+            <el-date-picker
+              v-model="queryInfo.queryItem.date"
+              type="date"
+              placeholder="选择日期"
+            >
+            </el-date-picker>
+          </div>
+        </div>
+        <div class="searchItem">
+          <div style="margin-top:10px">用户名：</div>
+          <div style="margin-right:30px">
+            <el-input
+              v-model="queryInfo.queryItem.username"
+              placeholder="按照用户名查找"
+              clearable
+            ></el-input>
+          </div>
+        </div>
+        <div class="searchItem">
+          <div style="margin-top:10px">内容：</div>
+          <div style="margin-right:30px">
+            <el-input
+              v-model="queryInfo.queryItem.content"
+              placeholder="按照内容查找"
+              clearable
+            ></el-input>
+          </div>
+        </div>
+        <div class="extend_searchBtn">
+          <div @click="drawer = true" type="primary">
+            ^点击展开更多搜索条件
+          </div>
+        </div>
+        <div class="Search_Msg">
+          <!-- 查找资讯 -->
+          <el-button type="primary">查找</el-button>
+        </div>
+      </div>
+      <el-divider></el-divider>
       <!-- 留言表格区域 -->
       <el-table
         :data="MessageList"
@@ -72,10 +136,19 @@
 export default {
   data() {
     return {
+      //抽屉相关的数据
+      drawer: false,
+      direction: "ttb",
       // 获取用户列表的参数对象
       queryInfo: {
         // 查询信息
-        query: "",
+        queryItem: {
+          date: "",
+          content: "",
+          username: "",
+          mobile: "",
+          email: "",
+        },
         // 当前的页数
         pagenum: 1,
         // 每一页的数据数
@@ -153,6 +226,30 @@ export default {
       console.log("123");
     },
     handleCurrentChange(val) {},
+    // 抽屉关闭的函数
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
   },
 };
 </script>
+<style scoped>
+.searchItem {
+  display: flex;
+}
+.searchPart {
+  display: flex;
+  justify-content: space-between;
+}
+.extend_searchBtn {
+  margin-top: 14px;
+  margin-left: -20px;
+  font-size: 14px;
+  color: rgb(16, 151, 235);
+  cursor: pointer;
+}
+</style>

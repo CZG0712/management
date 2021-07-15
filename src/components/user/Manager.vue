@@ -10,22 +10,22 @@
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->
-      <el-row :gutter="20">
-        <el-col :span="7">
+      <div style="display:flex;justify-content:space-between">
+        <div>
           <el-input
-            placeholder="请输入查询内容"
+            placeholder="输入用户名进行查询"
             v-model="queryInfo.queryItems"
             clearable
           >
             <el-button slot="append" icon="el-icon-search"> </el-button>
           </el-input>
-        </el-col>
-        <el-col :span="6">
+        </div>
+        <div>
           <el-button type="primary" @click="addDialogVisible = true"
             >添加管理员</el-button
           >
-        </el-col>
-      </el-row>
+        </div>
+      </div>
 
       <!-- 用户列表区域 -->
       <el-table :data="managerList" :stripe="true" border>
@@ -330,14 +330,12 @@ export default {
           },
         ],
         email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
           {
             validator: checkEmail,
             trigger: ["blur", "change"],
           },
         ],
         mobile: [
-          { required: true, message: "请输入手机号", trigger: "blur" },
           {
             validator: checkMobile,
             trigger: ["blur", "change"],

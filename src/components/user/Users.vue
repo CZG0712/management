@@ -10,17 +10,63 @@
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->
-      <el-row :gutter="20">
-        <el-col :span="7">
-          <el-input
-            placeholder="请输入内容"
-            v-model="queryInfo.query"
-            clearable
-          >
-            <el-button slot="append" icon="el-icon-search"> </el-button>
-          </el-input>
-        </el-col>
-      </el-row>
+      <div style="display:flex;justify-content:space-between">
+        <div style="display:flex">
+          <div style="margin-top:8px">
+            用户名：
+          </div>
+          <div>
+            <el-input
+              v-model="queryInfo.queryItem.username"
+              placeholder="按照用户名查找"
+              clearable
+            ></el-input>
+          </div>
+          <div style="margin-top:8px;margin-left:20px">
+            电话：
+          </div>
+          <div>
+            <el-input
+              v-model="queryInfo.queryItem.mobile"
+              placeholder="按照电话查找"
+              clearable
+            ></el-input>
+          </div>
+          <div style="margin-top:8px;margin-left:20px">
+            邮箱：
+          </div>
+          <div>
+            <el-input
+              v-model="queryInfo.queryItem.email"
+              placeholder="按照邮箱查找"
+              clearable
+            ></el-input>
+          </div>
+          <div style="margin-top:8px;margin-left:20px">
+            性别：
+          </div>
+          <div style="width:90px">
+            <el-select
+              v-model="queryInfo.queryItem.gender"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in genderOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <div>
+          <div style="margin-left:30px">
+            <el-button type="primary">查找</el-button>
+          </div>
+        </div>
+      </div>
+      <el-divider></el-divider>
 
       <!-- 用户列表区域 -->
       <el-table :data="userList" :stripe="true" border>
@@ -174,11 +220,19 @@ export default {
       cb(new Error("请输入合法的手机号"));
     };
     return {
-      value: "",
+      genderOptions: [
+        { value: "选项一", label: "男" },
+        { value: "选项二", label: "女" },
+      ],
       // 获取用户列表的参数对象
       queryInfo: {
         // 查询信息
-        query: "",
+        queryItem: {
+          username: "",
+          mobile: "",
+          email: "",
+          gender: "",
+        },
         // 当前的页数
         pagenum: 1,
         // 每一页的数据数

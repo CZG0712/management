@@ -10,18 +10,49 @@
     <!-- 卡片区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->
-      <el-row :gutter="20">
-        <el-col :span="7">
-          <el-input placeholder="搜索相关资讯" clearable>
-            <el-button slot="append" icon="el-icon-search"> </el-button>
-          </el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true">
-            发布资讯
-          </el-button>
-        </el-col>
-      </el-row>
+      <div class="topSearch">
+        <div class="searchPart">
+          <div class="searchItem">
+            <div style="margin-top:10px">日期：</div>
+            <div style="margin-right:30px">
+              <el-date-picker
+                v-model="queryInfo.queryItem.date"
+                type="date"
+                placeholder="选择日期"
+              >
+              </el-date-picker>
+            </div>
+          </div>
+          <div class="searchItem">
+            <div style="margin-top:10px">标题：</div>
+            <div style="margin-right:30px">
+              <el-input
+                v-model="queryInfo.queryItem.title"
+                placeholder="按照标题查找"
+                clearable
+              ></el-input>
+            </div>
+          </div>
+          <div class="searchItem">
+            <div style="margin-top:10px">内容：</div>
+            <div style="margin-right:30px">
+              <el-input
+                v-model="queryInfo.queryItem.content"
+                placeholder="按照内容查找"
+                clearable
+              ></el-input>
+            </div>
+          </div>
+        </div>
+        <div class="postNewNews">
+          <!-- 查找资讯 -->
+          <el-button type="primary">查找</el-button>
+          <el-button type="primary" @click="addDialogVisible = true"
+            >发布资讯</el-button
+          >
+        </div>
+      </div>
+      <el-divider></el-divider>
 
       <!-- 新闻资讯列表区域 -->
       <el-table
@@ -47,6 +78,7 @@
           label="内容"
           prop="content"
           align="center"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column label="操作" align="center">
           <!-- 作用域插槽 -->
@@ -153,7 +185,7 @@
       <!-- 修改资讯的对话框 -->
       <el-dialog title="编辑资讯" :visible.sync="editDialogVisible" width="50%">
         <!-- 内容主体区域 -->
-        <el-form :model="addNewsForm" ref="editNewsFormRef" label-width="70px">
+        <el-form :model="addNewsForm" ref="editNewsFormRef" label-width="80px">
           <el-form-item label="标题:">
             <el-input
               v-model="newsList[0].title"
@@ -221,6 +253,19 @@
 export default {
   data() {
     return {
+      // 获取用户列表的参数对象
+      queryInfo: {
+        // 查询信息
+        queryItem: {
+          date: "",
+          title: "",
+          content: "",
+        },
+        // 当前的页数
+        pagenum: 1,
+        // 每一页的数据数
+        pagesize: 5,
+      },
       dialogImageUrl: "",
       dialogVisible: false,
       disabled: false,
@@ -237,7 +282,7 @@ export default {
           date: "2021-7-1",
           title: "测试01",
           content:
-            "达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统",
+            "达冠公司后台管理系统达冠公司后台管理系统达冠公司后达冠公司后台管理系统达冠公司后台管理系统达冠公司后达冠公司后台管理系统达冠公司后台管理系统达冠公司后达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统达冠公司后台管理系统",
         },
         {
           date: "2021-7-2",
@@ -264,7 +309,7 @@ export default {
       }).catch((err) => err);
     },
 
-    //
+    //目前上传资讯图片的区域
     handleRemove(file) {
       console.log(file);
     },
@@ -278,3 +323,16 @@ export default {
   },
 };
 </script>
+<style scoped>
+.topSearch {
+  display: flex;
+  justify-content: space-between;
+}
+.searchPart {
+  display: flex;
+  /* justify-content: space-between; */
+}
+.searchItem {
+  display: flex;
+}
+</style>
