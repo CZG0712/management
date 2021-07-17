@@ -11,6 +11,7 @@ import TopMenu from "../components/contentManagement/topMenu.vue";
 import News from "../components/contentManagement/news.vue";
 import Slidder from "../components/contentManagement/slidder.vue";
 import Manager from "../components/user/Manager.vue";
+import TestPage from "../components/test.vue";
 
 //导入全局样式表
 import "../assets/css/global.css";
@@ -36,6 +37,7 @@ const routes = [
       { path: "/topmenu", component: TopMenu },
       { path: "/news", component: News },
       { path: "/slidder", component: Slidder },
+      { path: "/test", component: TestPage },
     ],
   },
 ];

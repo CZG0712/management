@@ -20,6 +20,7 @@
               v-model="queryInfo.queryItem.username"
               placeholder="按照用户名查找"
               clearable
+              style="width:150px"
             ></el-input>
           </div>
           <div style="margin-top:8px;margin-left:20px">
@@ -30,6 +31,7 @@
               v-model="queryInfo.queryItem.mobile"
               placeholder="按照电话查找"
               clearable
+              style="width:150px"
             ></el-input>
           </div>
           <div style="margin-top:8px;margin-left:20px">
@@ -39,6 +41,7 @@
             <el-input
               v-model="queryInfo.queryItem.email"
               placeholder="按照邮箱查找"
+              style="width:180px"
               clearable
             ></el-input>
           </div>
@@ -275,6 +278,7 @@ export default {
         mg_roles: "",
       },
       // 权限管理
+      value: "",
       options: [
         {
           value: "选项一",

@@ -13,9 +13,9 @@
       <el-row>
         <div class="clear_tips">当前官网轮播图:</div>
       </el-row>
-      <el-carousel :interval="5000" arrow="always">
+      <el-carousel :interval="3000" arrow="always" type="card">
         <el-carousel-item v-for="item in slideImgs" :key="item.id">
-          <img :src="item.src" />
+          <img :src="item.src" width="100%" height="100%" />
         </el-carousel-item>
       </el-carousel>
       <!-- 文件上传 -->
@@ -253,16 +253,6 @@ export default {
 };
 </script>
 <style scoped>
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-}
-
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }

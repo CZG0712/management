@@ -19,6 +19,7 @@
                 v-model="queryInfo.queryItem.date"
                 type="date"
                 placeholder="选择日期"
+                style="width:150px"
               >
               </el-date-picker>
             </div>
@@ -30,6 +31,7 @@
                 v-model="queryInfo.queryItem.title"
                 placeholder="按照标题查找"
                 clearable
+                style="width:150px"
               ></el-input>
             </div>
           </div>
@@ -46,8 +48,8 @@
         </div>
         <div class="postNewNews">
           <!-- 查找资讯 -->
-          <el-button type="primary">查找</el-button>
-          <el-button type="primary" @click="addDialogVisible = true"
+          <el-button type="primary" size="mini">查找</el-button>
+          <el-button type="primary" size="mini" @click="addDialogVisible = true"
             >发布资讯</el-button
           >
         </div>
@@ -170,7 +172,6 @@
                 </span>
               </div>
             </el-upload>
-            <!--  -->
           </el-form-item>
         </el-form>
         <!-- 底部按钮区域 -->
@@ -249,10 +250,15 @@
     </el-card>
   </div>
 </template>
+
 <script>
 export default {
   data() {
     return {
+      title: "",
+      showCreateTaskModal: false, // 新增任务弹出框显示标识：默认不显示
+      createTaskloading: false,
+      //
       // 获取用户列表的参数对象
       queryInfo: {
         // 查询信息
@@ -330,7 +336,6 @@ export default {
 }
 .searchPart {
   display: flex;
-  /* justify-content: space-between; */
 }
 .searchItem {
   display: flex;
